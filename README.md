@@ -1,0 +1,1 @@
+# coin_collection_no_lava
