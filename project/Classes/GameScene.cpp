@@ -41,11 +41,20 @@ bool GameScene::init()
     createPlayer();
     createCoins();
     createInterface();
+
+    return true;
+}
+
+void GameScene::onEnter() {
+    Scene::onEnter();
     registerInput();
     resetRound();
     scheduleUpdate();
+}
 
-    return true;
+void GameScene::onExit() {
+    unscheduleUpdate();
+    Scene::onExit();
 }
 
 void GameScene::createBackground()
@@ -74,14 +83,14 @@ void GameScene::createBackground()
         Vec2(GameConstants::DESIGN_WIDTH, GameConstants::DESIGN_HEIGHT),
         GameConstants::CONTROL_BORDER_COLOR);
 
-    addChild(background, -10);
+    addChild(background, kChildTagBackground);
 }
 
 void GameScene::createPlayer()
 {
     _player = Player::create();
     CCASSERT(_player != nullptr, "Failed to create player.");
-    addChild(_player, 5);
+    addChild(_player, kChildTagPlayer);
 }
 
 void GameScene::createCoins()
@@ -90,7 +99,7 @@ void GameScene::createCoins()
     {
         coin = Coin::create();
         CCASSERT(coin != nullptr, "Failed to create coin.");
-        addChild(coin, 2);
+        addChild(coin, kChildTagCoin);
     }
 }
 
@@ -103,7 +112,7 @@ void GameScene::createInterface()
     _scoreLabel->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
     _scoreLabel->setPosition(GameConstants::SCORE_X, GameConstants::SCORE_Y);
     _scoreLabel->setTextColor(Color4B::WHITE);
-    addChild(_scoreLabel, 10);
+    addChild(_scoreLabel, kChildTagHUD);
 
     _winLabel = Label::createWithSystemFont(
         "YOU WIN",
@@ -114,7 +123,7 @@ void GameScene::createInterface()
         GameConstants::DESIGN_HEIGHT * 0.5f);
     _winLabel->setTextColor(Color4B::WHITE);
     _winLabel->setVisible(false);
-    addChild(_winLabel, 10);
+    addChild(_winLabel, kChildTagHUD);
 
     const float resetLeft = GameConstants::DESIGN_WIDTH -
         GameConstants::RESET_MARGIN_RIGHT - GameConstants::RESET_WIDTH;
@@ -136,7 +145,7 @@ void GameScene::createInterface()
         Vec2(resetLeft + GameConstants::RESET_WIDTH,
              resetBottom + GameConstants::RESET_HEIGHT),
         GameConstants::CONTROL_BORDER_COLOR);
-    addChild(_resetVisual, 10);
+    addChild(_resetVisual, kChildTagHUD);
 
     _resetLabel = Label::createWithSystemFont(
         "Reset",
@@ -146,7 +155,7 @@ void GameScene::createInterface()
         resetLeft + GameConstants::RESET_WIDTH * 0.5f,
         resetBottom + GameConstants::RESET_HEIGHT * 0.5f);
     _resetLabel->setTextColor(Color4B::WHITE);
-    addChild(_resetLabel, 11);
+    addChild(_resetLabel, kChildTagHUD);
 }
 
 void GameScene::registerInput()

@@ -17,13 +17,37 @@
 class GameScene final : public cocos2d::Scene
 {
 public:
+    enum ChildTag {
+        None = 0,
+        kChildTagBackground,
+        kChildTagPlayer,
+        kChildTagCoin,
+        kChildTagHUD,
+    };
+    
+public:
     static GameScene* createScene();
 
+private:
     bool init() override;
+    void onEnter() override;
+    void onExit() override;
     void update(float deltaTime) override;
 
     CREATE_FUNC(GameScene);
 
+private:
+    Player* _player = nullptr;
+    std::array<Coin*, 20> _coins{};
+    cocos2d::Label* _scoreLabel = nullptr;
+    cocos2d::Label* _winLabel = nullptr;
+    cocos2d::DrawNode* _resetVisual = nullptr;
+    cocos2d::Label* _resetLabel = nullptr;
+    cocos2d::Rect _resetBounds;
+
+    int _score = 0;
+    bool _roundComplete = false;
+    
 private:
     void createBackground();
     void createPlayer();
@@ -46,17 +70,6 @@ private:
     void completeRound();
 
     bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-
-    Player* _player = nullptr;
-    std::array<Coin*, 20> _coins{};
-    cocos2d::Label* _scoreLabel = nullptr;
-    cocos2d::Label* _winLabel = nullptr;
-    cocos2d::DrawNode* _resetVisual = nullptr;
-    cocos2d::Label* _resetLabel = nullptr;
-    cocos2d::Rect _resetBounds;
-
-    int _score = 0;
-    bool _roundComplete = false;
 };
 
 
